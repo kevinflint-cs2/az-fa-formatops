@@ -1,0 +1,3 @@
+requests
+azure-functions
+pypandoc>=1.13
