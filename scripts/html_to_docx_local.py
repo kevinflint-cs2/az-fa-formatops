@@ -2,7 +2,7 @@ import os
 
 import requests
 
-HTML_PATH = "./delme.html"
+HTML_PATH = "./DELME.html"
 URL = os.getenv("FUNCTION_URL", "http://localhost:7071/api/html_to_docx/convert")
 
 # 1. Read HTML file as string
@@ -18,6 +18,6 @@ response = requests.post(
     headers={"Content-Type": "application/json"},
     json=payload,  # requests will json.dumps for you
 )
-
+print("URL:", URL)
 print("Status:", response.status_code)
 print("Response:", response.text)
