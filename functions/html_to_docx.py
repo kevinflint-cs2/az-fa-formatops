@@ -71,6 +71,14 @@ def _html_to_docx_base64(html: str) -> str:
     """
     import pypandoc
 
+    # Ensure pandoc is available (download if needed)
+    try:
+        pypandoc.get_pandoc_version()
+    except OSError:
+        # Pandoc not found, download it
+        pypandoc.download_pandoc(targetfolder="/tmp/pandoc")
+        os.environ.setdefault("PYPANDOC_PANDOC", "/tmp/pandoc/pandoc")
+
     # Use temporary directory for file operations (auto-cleanup)
     with tempfile.TemporaryDirectory() as tmpdir:
         docx_path = os.path.join(tmpdir, "output.docx")
