@@ -1,0 +1,8 @@
+pytest
+requests
+ruff
+mypy
+types-requests
+commitizen
+pre-commit
+detect-secrets
