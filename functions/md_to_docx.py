@@ -70,11 +70,7 @@ def _markdown_to_docx_base64(markdown: str) -> str:
 
     import pypandoc
 
-    try:
-        pypandoc.get_pandoc_version()
-    except OSError:
-        pypandoc.download_pandoc(targetfolder="/tmp/pandoc")
-        os.environ.setdefault("PYPANDOC_PANDOC", "/tmp/pandoc/pandoc")
+    _ensure_pandoc_available()
 
     with tempfile.TemporaryDirectory() as tmpdir:
         docx_path = os.path.join(tmpdir, "output.docx")
@@ -85,3 +81,20 @@ def _markdown_to_docx_base64(markdown: str) -> str:
             docx_bytes = docx_file.read()
 
     return base64.b64encode(docx_bytes).decode("utf-8")
+
+
+def _ensure_pandoc_available() -> None:
+    """Ensure pandoc is available without attempting to download at runtime."""
+
+    import pypandoc
+
+    pandoc_path = os.getenv("PYPANDOC_PANDOC")
+    if pandoc_path and os.path.exists(pandoc_path):
+        return
+
+    try:
+        pypandoc.get_pandoc_version()
+    except OSError as exc:
+        raise RuntimeError(
+            "Pandoc binary not found; set PYPANDOC_PANDOC to the installed pandoc path"
+        ) from exc

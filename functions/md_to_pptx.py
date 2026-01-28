@@ -70,11 +70,7 @@ def _markdown_to_pptx_base64(markdown: str) -> str:
 
     import pypandoc
 
-    try:
-        pypandoc.get_pandoc_version()
-    except OSError:
-        pypandoc.download_pandoc(targetfolder="/tmp/pandoc")
-        os.environ.setdefault("PYPANDOC_PANDOC", "/tmp/pandoc/pandoc")
+    _ensure_pandoc_available()
 
     with tempfile.TemporaryDirectory() as tmpdir:
         pptx_path = os.path.join(tmpdir, "output.pptx")
@@ -85,3 +81,16 @@ def _markdown_to_pptx_base64(markdown: str) -> str:
             pptx_bytes = pptx_file.read()
 
     return base64.b64encode(pptx_bytes).decode("utf-8")
+
+
+def _ensure_pandoc_available() -> None:
+    """Ensure pandoc is available, downloading if missing (mirrors html_to_docx)."""
+
+    import pypandoc
+
+    try:
+        pypandoc.get_pandoc_version()
+    except OSError:
+        # Download to writable temp locations on the Function host
+        pypandoc.download_pandoc(targetfolder="/tmp/pandoc", download_folder="/tmp")
+        os.environ.setdefault("PYPANDOC_PANDOC", "/tmp/pandoc/pandoc")
