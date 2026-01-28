@@ -3,7 +3,7 @@ import logging
 
 import azure.functions as func
 
-from functions import html_to_docx
+from functions import html_to_docx, yaml_checker
 
 app = func.FunctionApp()
 
@@ -57,6 +57,48 @@ def html_to_docx_convert(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as e:
         # Unexpected error
+        logging.error(f"Unexpected error: {str(e)}", exc_info=True)
+        error = {"status": "error", "error": {"msg": "Internal server error"}}
+        return func.HttpResponse(json.dumps(error), mimetype="application/json", status_code=500)
+
+
+@app.route(route="yaml/validate", methods=["POST"])
+def yaml_validate(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    Validate YAML content and report syntax issues.
+
+    Request Body:
+        {
+            "yaml": "key: value"
+        }
+
+    Returns:
+        JSON response:
+        - 200: Always returns a validation result with keys 'valid' and 'issues'
+        - 400: Missing/invalid input
+        - 500: Unexpected server error
+    """
+    logging.info("YAML validation request received")
+
+    try:
+        try:
+            payload = req.get_json()
+        except ValueError as e:
+            raise ValueError("Invalid JSON in request body") from e
+
+        if not payload:
+            raise ValueError("Empty request body")
+
+        result = yaml_checker.handle_request(payload)
+
+        return func.HttpResponse(json.dumps(result), mimetype="application/json", status_code=200)
+
+    except ValueError as e:
+        logging.warning(f"Bad request: {str(e)}")
+        error = {"status": "error", "error": {"msg": str(e)}}
+        return func.HttpResponse(json.dumps(error), mimetype="application/json", status_code=400)
+
+    except Exception as e:  # Unexpected error
         logging.error(f"Unexpected error: {str(e)}", exc_info=True)
         error = {"status": "error", "error": {"msg": "Internal server error"}}
         return func.HttpResponse(json.dumps(error), mimetype="application/json", status_code=500)

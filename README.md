@@ -115,7 +115,8 @@ mypy . --config-file mypy.ini
 az-fa-formatops/
 ├── function_app.py              # HTTP route definitions
 ├── functions/                   # Business logic modules
-│   └── html_to_docx.py
+│   ├── html_to_docx.py
+│   └── yaml_checker.py
 ├── tests/                       # Test suites
 │   ├── test_html_to_docx.py
 │   └── test_html_to_docx_endpoint.py
@@ -131,9 +132,14 @@ az-fa-formatops/
 ## Contributing
 
 1. Create a feature branch: `git checkout -b feat/my-feature`
-2. Follow the [development process](docs/development/development-process.prompt.md)
+2. Follow the [development process](.github/prompts/development-process.prompt.md)
 3. Ensure all tests pass and code quality checks succeed
 4. Submit a pull request
+
+## Endpoints
+
+- HTML to DOCX conversion: `/api/html_to_docx/convert` (POST)
+- YAML validation: `/api/yaml/validate` (POST)
 
 ## License
 
