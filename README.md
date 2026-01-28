@@ -23,6 +23,28 @@ curl -X POST http://localhost:7071/api/html_to_docx/convert \
 - [Usage Examples](docs/examples/html_to_docx-curl.md)
 - [Implementation Details](docs/implementation/html_to_docx.md)
 
+### Markdown to DOCX Conversion
+
+Convert Markdown content to DOCX with base64-encoded output for automation scenarios.
+
+**Endpoint:** `POST /api/md_to_docx/convert`
+
+**Documentation:**
+- [Module Reference](docs/modules/md_to_docx.md)
+- [Usage Examples](docs/examples/md_to_docx-curl.md)
+- [Implementation Details](docs/implementation/md_to_docx.md)
+
+### Markdown to PPTX Conversion
+
+Convert Markdown content to PowerPoint PPTX with base64-encoded output.
+
+**Endpoint:** `POST /api/md_to_pptx/convert`
+
+**Documentation:**
+- [Module Reference](docs/modules/md_to_pptx.md)
+- [Usage Examples](docs/examples/md_to_pptx-curl.md)
+- [Implementation Details](docs/implementation/md_to_pptx.md)
+
 ## Requirements
 
 - Python 3.11+
@@ -116,10 +138,16 @@ az-fa-formatops/
 ├── function_app.py              # HTTP route definitions
 ├── functions/                   # Business logic modules
 │   ├── html_to_docx.py
+│   ├── md_to_docx.py
+│   ├── md_to_pptx.py
 │   └── yaml_checker.py
 ├── tests/                       # Test suites
 │   ├── test_html_to_docx.py
-│   └── test_html_to_docx_endpoint.py
+│   ├── test_html_to_docx_endpoint.py
+│   ├── test_md_to_docx.py
+│   ├── test_md_to_docx_endpoint.py
+│   ├── test_md_to_pptx.py
+│   └── test_md_to_pptx_endpoint.py
 ├── docs/                        # Documentation
 │   ├── modules/                 # Module references
 │   ├── examples/                # Usage examples
@@ -140,6 +168,8 @@ az-fa-formatops/
 
 - HTML to DOCX conversion: `/api/html_to_docx/convert` (POST)
 - YAML validation: `/api/yaml/validate` (POST)
+- Markdown to DOCX conversion: `/api/md_to_docx/convert` (POST)
+- Markdown to PPTX conversion: `/api/md_to_pptx/convert` (POST)
 
 ## License
 
