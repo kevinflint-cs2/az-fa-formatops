@@ -80,6 +80,7 @@ def test_html_to_docx_base64_success():
     html = "<html><body><p>Test content</p></body></html>"
 
     with (
+        patch("pypandoc.get_pandoc_version", return_value="3.1.0"),
         patch("pypandoc.convert_text") as mock_pypandoc,
         patch("builtins.open", mock_open(read_data=b"DOCX_BINARY_DATA")),
         patch("tempfile.TemporaryDirectory") as mock_tmpdir,
@@ -113,6 +114,7 @@ def test_html_to_docx_base64_pypandoc_error():
     html = "<html><body><p>Test</p></body></html>"
 
     with (
+        patch("pypandoc.get_pandoc_version", return_value="3.1.0"),
         patch("pypandoc.convert_text") as mock_pypandoc,
         patch("tempfile.TemporaryDirectory") as mock_tmpdir,
     ):
